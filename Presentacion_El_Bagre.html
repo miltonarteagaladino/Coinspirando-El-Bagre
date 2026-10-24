@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapeo Sistémico El Bagre - SEHPAZ & Co-inspira</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght=0,300..800;1,300..800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        terracotta: { 50: '#FDF6F4', 100: '#FBECE8', 200: '#F5D0C7', 400: '#D37A65', 500: '#C2593F', 600: '#A94B34', 700: '#8E3E2B' },
+                        olive: { 50: '#F4F6F4', 100: '#E2E6DF', 200: '#C6CEC1', 500: '#556B2F', 600: '#4A5842', 700: '#3D4936' },
+                        sand: { 50: '#FAF8F5', 100: '#F5ECE1', 200: '#EADBC8', 300: '#DCC7AD', 400: '#CDB18F' },
+                        charcoal: { DEFAULT: '#221F1F', light: '#3A3635' },
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #FAF8F5; color: #221F1F; overflow: hidden; margin: 0; padding: 0; }
+        .slide {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; opacity: 0; transform: scale(0.98); visibility: hidden; z-index: 1;
+        }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: auto; visibility: visible; z-index: 10; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #F5ECE1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #DCC7AD; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C2593F; }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-terracotta-200 selection:text-terracotta-700">
+
+    <div class="flex h-screen w-screen overflow-hidden bg-sand-100">
+        
+        <!-- SIDEBAR DE NOTAS -->
+        <aside id="notes-sidebar" class="w-96 bg-sand-50 border-r border-sand-200 flex flex-col shadow-lg z-20 transition-all duration-300 ease-in-out shrink-0 relative">
+            <div class="p-6 border-b border-sand-200 bg-white/50 backdrop-blur">
+                <div class="flex items-center space-x-2 text-terracotta-600 mb-1">
+                    <i data-lucide="book-open-text" class="w-5 h-5"></i>
+                    <h2 class="font-sans font-bold text-sm tracking-widest uppercase">Notas del orador</h2>
+                </div>
+                <p class="text-xs text-charcoal-light opacity-70">Guía de facilitación - Milton</p>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto p-6" id="notes-container">
+                <!-- Contenido Dinámico JS -->
+            </div>
+            
+            <div class="p-4 border-t border-sand-200 bg-sand-100/50 text-xs text-charcoal-light flex justify-between items-center">
+                <span>Tiempo transcurrido</span>
+                <span class="font-mono text-terracotta-600 font-bold text-sm" id="timer">00:00</span>
+            </div>
+        </aside>
+
+        <!-- ÁREA CENTRAL PRESENTACIÓN -->
+        <main id="main-presentation" class="flex-1 flex flex-col relative bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] min-w-0">
+            
+            <!-- Contenedor Slides -->
+            <div class="flex-grow flex items-center justify-center p-4 md:p-8 relative z-10">
+                <div class="w-full max-w-6xl aspect-[16/9] bg-white shadow-2xl rounded-xl overflow-hidden relative border border-sand-200" id="slides-wrapper">
+                    
+                    <!-- SLIDE 1: PORTADA -->
+                    <div class="slide active" id="slide-0">
+                        <div class="absolute inset-0 bg-gradient-to-br from-sand-50 via-white to-sand-100"></div>
+                        <div class="relative h-full flex flex-col justify-center items-center text-center px-16">
+                            <h1 class="font-serif text-5xl md:text-6xl text-charcoal leading-tight mb-6">
+                                Mapeo sistémico en <br/><span class="text-terracotta-600 italic">El Bagre</span>
+                            </h1>
+                            <p class="font-sans text-xl text-charcoal-light max-w-2xl font-light mb-8">
+                                Conversaciones, fuerzas y oportunidades para la construcción de paz cotidiana.
+                            </p>
+                            <div class="flex space-x-4">
+                                <span class="px-5 py-2 rounded-full bg-olive-50 text-olive-700 font-medium border border-olive-100 shadow-sm text-sm">Corporación SEHPAZ</span>
+                                <span class="px-5 py-2 rounded-full bg-terracotta-50 text-terracotta-700 font-medium border border-terracotta-100 shadow-sm text-sm">Co-inspira</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 2: ECOSISTEMA (Rediseñada para evitar vacío grande) -->
+                    <div class="slide bg-white" id="slide-1">
+                        <div class="relative h-full flex flex-col p-12 justify-center">
+                            <span class="font-sans text-xs tracking-[0.15em] text-terracotta-600 uppercase font-bold text-center block mb-2">Bloque 2 • Contexto</span>
+                            <h2 class="font-serif text-4.5xl md:text-5xl text-charcoal text-center mb-12">El ecosistema: quiénes somos</h2>
+                            <div class="grid grid-cols-3 gap-8 max-w-5xl mx-auto">
+                                <div class="bg-sand-50 rounded-2xl p-8 border border-sand-200 flex flex-col items-center text-center shadow-md min-h-[300px] justify-center">
+                                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm text-olive-600 mb-6 border border-sand-200"><i data-lucide="network" class="w-8 h-8"></i></div>
+                                    <h3 class="font-serif text-2xl text-charcoal mb-4">Red ECO</h3>
+                                    <p class="text-sm md:text-base text-charcoal-light leading-relaxed">Red de organizaciones y personas unidas para la construcción de paz en Colombia.</p>
+                                </div>
+                                <div class="bg-sand-50 rounded-2xl p-8 border border-sand-200 flex flex-col items-center text-center shadow-md min-h-[300px] justify-center relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 w-full h-1.5 bg-terracotta-500"></div>
+                                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm text-olive-600 mb-6 border border-sand-200"><i data-lucide="users" class="w-8 h-8"></i></div>
+                                    <h3 class="font-serif text-2xl text-charcoal mb-4">SEHPAZ</h3>
+                                    <p class="text-sm md:text-base text-charcoal-light leading-relaxed">Liderazgo histórico, convocatoria y legitimidad territorial en el Bajo Cauca.</p>
+                                </div>
+                                <div class="bg-sand-50 rounded-2xl p-8 border border-sand-200 flex flex-col items-center text-center shadow-md min-h-[300px] justify-center">
+                                    <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-sm text-terracotta-600 mb-6 border border-sand-200"><i data-lucide="compass" class="w-8 h-8"></i></div>
+                                    <h3 class="font-serif text-2xl text-charcoal mb-4">Facilitación</h3>
+                                    <p class="text-sm md:text-base text-charcoal-light leading-relaxed">Acompañamiento metodológico en territorio (Milton & Alejandra / CreAmos).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 3: LA INSPIRACIÓN (Incluye foto de territorio de manera equilibrada) -->
+                    <div class="slide bg-olive-700 text-white" id="slide-2">
+                        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+                        <div class="relative h-full flex flex-row">
+                            <div class="w-1/2 p-12 flex flex-col justify-center">
+                                <span class="font-sans text-xs tracking-[0.15em] text-sand-300 uppercase font-bold mb-3">La inspiración</span>
+                                <h2 class="font-serif text-4.5xl md:text-5xl leading-tight mb-8">El Tambo y el Cauca</h2>
+                                <p class="text-base md:text-lg font-light leading-relaxed mb-6">Un mapa sistémico no es un diagnóstico inerte. En el Cauca, permitió a la comunidad verse a sí misma y descubrir sus propios poderes.</p>
+                                <ul class="space-y-4 text-sand-100">
+                                    <li class="flex items-center gap-3"><i data-lucide="sprout" class="text-terracotta-400 w-5 h-5"></i><span>Nacimiento de la <strong>Fundación CreAmos</strong></span></li>
+                                    <li class="flex items-center gap-3"><i data-lucide="building" class="text-terracotta-400 w-5 h-5"></i><span>Construcción del <strong>SOLE Lab</strong></span></li>
+                                    <li class="flex items-center gap-3"><i data-lucide="heart-handshake" class="text-terracotta-400 w-5 h-5"></i><span>Iniciativas de mujeres, agua y jóvenes financiadas</span></li>
+                                </ul>
+                            </div>
+                            <div class="w-1/2 h-full relative overflow-hidden flex items-center justify-center p-8 bg-olive-800">
+                                <div class="relative w-full h-full max-h-[85%] rounded-xl overflow-hidden shadow-2xl border-4 border-white/25 flex items-center justify-center bg-olive-900">
+                                    <img src="inspiraciones_territorio.png" alt="Inspiraciones del Territorio en Cauca" class="object-cover w-full h-full" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1200'; this.insertAdjacentHTML('afterend', '<div class=\'absolute inset-0 bg-black/40 flex items-center justify-center text-xs text-white p-4 text-center\'>Para visualizar tu foto, guarda image_3 como inspiraciones_territorio.png en la misma carpeta del HTML.</div>');">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 4: PROPÓSITO LOCAL -->
+                    <div class="slide bg-sand-100" id="slide-3">
+                        <div class="relative h-full flex flex-col items-center justify-center text-center px-16">
+                            <span class="font-sans text-xs tracking-[0.2em] text-terracotta-600 uppercase font-bold mb-6">El propósito local</span>
+                            <i data-lucide="quote" class="w-12 h-12 text-terracotta-300 mx-auto mb-6"></i>
+                            <h2 class="font-serif text-4xl md:text-5xl leading-tight text-charcoal italic max-w-4xl">
+                                "¿Qué fuerzas y dinámicas influyen en la construcción y el sostenimiento de la <span class="text-terracotta-600 font-bold">paz cotidiana</span> en el municipio de El Bagre, Antioquia?"
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 5: SENSIBILIZACIÓN (RELOJ VS NUBE) -->
+                    <div class="slide bg-white" id="slide-4">
+                        <div class="relative h-full flex flex-col p-12">
+                            <span class="font-sans text-xs tracking-[0.15em] text-olive-600 uppercase font-bold">Bloque 3 • Sensibilización Sistémica</span>
+                            <h2 class="font-serif text-4xl text-charcoal mt-2 mb-8">Problemas de reloj y problemas de nube</h2>
+                            
+                            <div class="flex-grow flex gap-8">
+                                <!-- Botones Izquierda -->
+                                <div class="w-1/3 flex flex-col justify-center space-y-6">
+                                    <button onclick="activateSysType('reloj')" class="sys-btn bg-sand-50 border-2 border-transparent hover:border-terracotta-300 p-4 rounded-xl flex items-center gap-4 transition-all w-full text-left" data-sys="reloj">
+                                        <div class="bg-white p-3 rounded-lg shadow-sm text-charcoal"><i data-lucide="watch"></i></div>
+                                        <div><h4 class="font-bold text-charcoal">El Reloj</h4><p class="text-xs text-charcoal-light">Ronda 1</p></div>
+                                    </button>
+                                    <button onclick="activateSysType('nube')" class="sys-btn bg-sand-50 border-2 border-transparent hover:border-olive-300 p-4 rounded-xl flex items-center gap-4 transition-all w-full text-left" data-sys="nube">
+                                        <div class="bg-white p-3 rounded-lg shadow-sm text-charcoal"><i data-lucide="cloud"></i></div>
+                                        <div><h4 class="font-bold text-charcoal">La Nube</h4><p class="text-xs text-charcoal-light">Ronda 2</p></div>
+                                    </button>
+                                </div>
+                                <!-- Display Derecha -->
+                                <div class="w-2/3 bg-sand-50 rounded-2xl border border-sand-200 p-8 flex flex-col justify-center transition-opacity" id="sys-display">
+                                    <div class="text-center opacity-50"><i data-lucide="mouse-pointer-click" class="w-12 h-12 mx-auto mb-4"></i><p>Haz clic en un sistema para ver las instrucciones del juego</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 6: REFLEXIÓN JUEGO -->
+                    <div class="slide bg-terracotta-600 text-white" id="slide-5">
+                        <div class="relative h-full flex flex-col items-center justify-center text-center px-16">
+                            <div class="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mb-8 backdrop-blur-sm"><i data-lucide="message-circle-question" class="w-10 h-10"></i></div>
+                            <h2 class="font-serif text-4xl md:text-5xl leading-tight italic max-w-4xl">
+                                "¿De qué nos damos cuenta? Si El Bagre fuera este salón, ¿qué nos enseña este ejercicio sobre los retos de intentar construir paz en el territorio?"
+                            </h2>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 7: DOS COLUMNAS (ENFOQUES) -->
+                    <div class="slide bg-white" id="slide-6">
+                        <div class="relative h-full flex flex-col p-12">
+                            <h2 class="font-serif text-4xl text-charcoal mb-10 text-center">Enfoques de intervención</h2>
+                            <div class="grid grid-cols-2 gap-8 h-full">
+                                <div class="bg-sand-50 border border-sand-200 rounded-xl p-8 flex flex-col">
+                                    <h3 class="text-xl font-bold text-terracotta-600 mb-6 flex items-center gap-2"><i data-lucide="settings-2"></i> Enfoque Mecánico</h3>
+                                    <ul class="space-y-4 text-charcoal-light flex-grow justify-center flex flex-col text-base md:text-lg">
+                                        <li>• Finito, predecible y controlable.</li>
+                                        <li>• Se aísla el elemento del todo (se fragmenta).</li>
+                                        <li>• Modificación de una variable a la vez.</li>
+                                        <li>• Buscar "la pieza rota" y repararla.</li>
+                                    </ul>
+                                </div>
+                                <div class="bg-olive-50 border border-olive-100 rounded-xl p-8 flex flex-col">
+                                    <h3 class="text-xl font-bold text-olive-700 mb-6 flex items-center gap-2"><i data-lucide="infinity"></i> Enfoque Sistémico Complejo</h3>
+                                    <ul class="space-y-4 text-charcoal-light flex-grow justify-center flex flex-col text-base md:text-lg">
+                                        <li>• Infinito, dinámico, impredecible.</li>
+                                        <li>• Análisis centrado en las interacciones y relaciones.</li>
+                                        <li>• Considera efectos colaterales (interdependencia).</li>
+                                        <li>• Buscar patrones y aprovechar oportunidades.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 8: EJEMPLOS (Incorporado después de los enfoques) -->
+                    <div class="slide bg-white" id="slide-7">
+                        <div class="relative h-full flex flex-col p-12 justify-center">
+                            <span class="font-sans text-xs tracking-[0.15em] text-terracotta-600 uppercase font-bold text-center block mb-2">Ejemplos concretos</span>
+                            <h2 class="font-serif text-4.5xl text-charcoal text-center mb-8">¿Reloj o Nube?</h2>
+                            
+                            <div class="grid grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch relative h-[65%]">
+                                <!-- Línea divisoria central -->
+                                <div class="absolute top-4 bottom-4 left-1/2 w-0.5 bg-sand-300 transform -translate-x-1/2"></div>
+                                
+                                <!-- Ejemplos Reloj -->
+                                <div class="pr-8 flex flex-col justify-center space-y-4">
+                                    <h3 class="font-serif text-2xl text-terracotta-600 mb-2 flex items-center gap-2"><i data-lucide="box"></i> Problemas tipo Reloj (Mecánicos)</h3>
+                                    <ul class="space-y-3 text-base md:text-lg text-charcoal-light font-medium">
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-terracotta-500"></i> Repartir paquetes de comida.</li>
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-terracotta-500"></i> Instalar paneles solares.</li>
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-terracotta-500"></i> Comercializar un nuevo producto.</li>
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-terracotta-500"></i> Llevar a cabo un proceso electoral.</li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Ejemplos Nube -->
+                                <div class="pl-8 flex flex-col justify-center space-y-4">
+                                    <h3 class="font-serif text-2xl text-olive-700 mb-2 flex items-center gap-2"><i data-lucide="sparkles"></i> Problemas tipo Nube (Sistémicos)</h3>
+                                    <ul class="space-y-3 text-base md:text-lg text-charcoal-light font-medium">
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-olive-500"></i> Garantizar la seguridad alimentaria.</li>
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-olive-500"></i> Combatir el cambio climático.</li>
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-olive-500"></i> Construir un negocio sostenible.</li>
+                                        <li class="flex items-center gap-3"><i data-lucide="arrow-right" class="w-4 h-4 text-olive-500"></i> Fomentar una democracia sana.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 9: TRANSFORMACION SISTEMICA -->
+                    <div class="slide bg-sand-100" id="slide-8">
+                        <div class="relative h-full flex flex-col p-12 justify-center">
+                            <h2 class="font-serif text-4xl text-charcoal mb-8 text-center">Qué implica una transformación sistémica</h2>
+                            <div class="max-w-4xl mx-auto space-y-5 bg-white p-8 md:p-10 rounded-2xl shadow-md border border-sand-200 text-[17px] md:text-lg text-charcoal-light leading-relaxed">
+                                <p class="flex items-start gap-4"><i data-lucide="ban" class="w-6 h-6 text-terracotta-500 shrink-0 mt-1"></i> El sistema no se cambia desde afuera, ni se controla.</p>
+                                <p class="flex items-start gap-4"><i data-lucide="eye" class="w-6 h-6 text-olive-600 shrink-0 mt-1"></i> Pasamos de enfocarnos en "problemas" a entender cómo funcionan las relaciones hoy (mirada apreciativa).</p>
+                                <p class="flex items-start gap-4"><i data-lucide="handshake" class="w-6 h-6 text-olive-600 shrink-0 mt-1"></i> Pasamos de convencer o imponer a <strong>comprender, participar, colaborar y adaptar</strong>.</p>
+                                <p class="flex items-start gap-4"><i data-lucide="wand-2" class="w-6 h-6 text-terracotta-500 shrink-0 mt-1"></i> No traemos "soluciones mágicas"; el cambio se concibe como un proceso dinámico y no como un resultado fijo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 10: INMERSIÓN / QR -->
+                    <div class="slide bg-white" id="slide-9">
+                        <div class="relative h-full flex p-12 gap-12 items-center">
+                            <div class="w-1/2">
+                                <span class="font-sans text-xs tracking-[0.15em] text-terracotta-600 uppercase font-bold">Bloque 4 • Inmersión interactiva</span>
+                                <h2 class="font-serif text-4xl text-charcoal mt-2 mb-8">Exploración de los mapas</h2>
+                                <ol class="space-y-5 text-lg text-charcoal-light list-decimal list-inside font-medium">
+                                    <li>Formemos 3 grupos de 5 personas.</li>
+                                    <li>Ingresen a la plataforma escaneando el código o desde sus computadores.</li>
+                                    <li>Exploren los mapas de El Tambo, Cauca y la sección Fotovoz (15 mins).</li>
+                                    <li>Formulen <strong class="text-terracotta-600">dos (2) preguntas</strong> concretas sobre el proceso para Alejandra Solarte.</li>
+                                </ol>
+                            </div>
+                            <div class="w-1/2 flex flex-col items-center justify-center">
+                                <div class="bg-sand-50 p-6 rounded-2xl border border-sand-200 shadow-md">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://coinspira.estudiovastago.com&color=221F1F&bgcolor=FAF8F5" alt="QR Co-inspira" class="rounded-lg">
+                                </div>
+                                <p class="mt-4 font-mono text-sm text-charcoal font-bold">coinspira.estudiovastago.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 11: ALCANCE VIAJE -->
+                    <div class="slide bg-olive-700 text-white" id="slide-10">
+                        <div class="relative h-full flex flex-col p-12 justify-center">
+                            <span class="font-sans text-xs tracking-[0.15em] text-sand-300 uppercase font-bold text-center block mb-2">Bloque 5 • Gobernanza</span>
+                            <h2 class="font-serif text-4xl mb-12 text-center">El alcance de nuestro viaje</h2>
+                            <div class="grid grid-cols-2 gap-8 max-w-4xl mx-auto">
+                                <div class="bg-white/10 p-8 rounded-xl border border-white/20 backdrop-blur-sm text-center">
+                                    <i data-lucide="map" class="w-12 h-12 text-sand-200 mx-auto mb-4"></i>
+                                    <h3 class="font-bold text-xl mb-3 text-white">Llegamos al Mapa (Presencial)</h3>
+                                    <p class="text-sm text-sand-100 font-light">3 encuentros financiados por Red ECO para construir y finalizar el mapa sistémico físico y digital.</p>
+                                </div>
+                                <div class="bg-white/10 p-8 rounded-xl border border-white/20 backdrop-blur-sm text-center">
+                                    <i data-lucide="lightbulb" class="w-12 h-12 text-sand-200 mx-auto mb-4"></i>
+                                    <h3 class="font-bold text-xl mb-3 text-white">Oportunidades (Virtual)</h3>
+                                    <p class="text-sm text-sand-100 font-light">Acompañamiento en línea para que cada organización analice el mapa y decida sus propias rutas de acción.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 12: ROLES EQUIPO (Mejoras de espacio y balance) -->
+                    <div class="slide bg-white" id="slide-11">
+                        <div class="relative h-full flex flex-col p-12 justify-center">
+                            <span class="font-sans text-xs tracking-[0.15em] text-terracotta-600 uppercase font-bold text-center block mb-2">Compromiso y Gobernanza</span>
+                            <h2 class="font-serif text-4xl text-charcoal mb-10 text-center">Los roles del equipo</h2>
+                            
+                            <div class="grid grid-cols-3 gap-6 max-w-5xl mx-auto mb-8">
+                                <div class="bg-sand-50 border border-sand-200 rounded-2xl p-6 text-center shadow-md">
+                                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-terracotta-600 border border-sand-200"><i data-lucide="link"></i></div>
+                                    <h3 class="font-serif text-xl text-charcoal mb-2">Enlace Local</h3>
+                                    <p class="text-xs md:text-sm text-charcoal-light leading-relaxed"><strong>Dayanis Castillo.</strong> Coordinación logística, convocatorias y seguimiento territorial permanente.</p>
+                                </div>
+                                <div class="bg-sand-50 border border-sand-200 rounded-2xl p-6 text-center shadow-md relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 w-full h-1.5 bg-olive-500"></div>
+                                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-olive-600 border border-sand-200"><i data-lucide="cog"></i></div>
+                                    <h3 class="font-serif text-xl text-charcoal mb-2">Equipo Motor</h3>
+                                    <p class="text-xs md:text-sm text-charcoal-light leading-relaxed"><strong>Grupo base (aprox. 5 personas)</strong> voluntario, que asistirá a reuniones virtuales para avanzar y refinar el mapa.</p>
+                                </div>
+                                <div class="bg-sand-50 border border-sand-200 rounded-2xl p-6 text-center shadow-md">
+                                    <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-terracotta-600 border border-sand-200"><i data-lucide="users-round"></i></div>
+                                    <h3 class="font-serif text-xl text-charcoal mb-2">Mapeadores</h3>
+                                    <p class="text-xs md:text-sm text-charcoal-light leading-relaxed"><strong>Todos los presentes hoy.</strong> Asistencia a los talleres presenciales, aporte de visiones, historias y análisis.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Frase de Anclaje inferior para balancear el espacio -->
+                            <div class="max-w-4xl mx-auto w-full bg-olive-50 border border-olive-100 rounded-xl px-6 py-4 flex items-center gap-4 text-olive-700 justify-center">
+                                <i data-lucide="shield-check" class="w-6 h-6 text-olive-600 shrink-0"></i>
+                                <p class="text-sm md:text-base font-semibold italic text-center">"El éxito de este mapa depende de la participación activa de quienes mejor conocen las dinámicas diarias de El Bagre."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 13: CRONOGRAMA INTERACTIVO -->
+                    <div class="slide bg-sand-50" id="slide-12">
+                        <div class="relative h-full flex flex-col p-12">
+                            <span class="font-sans text-xs tracking-[0.15em] text-terracotta-600 uppercase font-bold mb-1">Ruta participativa</span>
+                            <h2 class="font-serif text-4xl text-charcoal mb-8">Cronograma de compromisos a confirmar</h2>
+                            
+                            <div class="flex gap-4">
+                                <!-- Botones Meses -->
+                                <div class="w-1/3 flex flex-col space-y-2">
+                                    <button onclick="activateTime(0)" class="time-btn bg-white border border-sand-200 hover:border-terracotta-400 p-3 rounded-lg text-left transition-colors flex justify-between" data-idx="0">
+                                        <span class="font-bold text-charcoal">Noviembre</span><span class="text-xs text-terracotta-600 uppercase">Acordar</span>
+                                    </button>
+                                    <button onclick="activateTime(1)" class="time-btn bg-white border border-sand-200 hover:border-terracotta-400 p-3 rounded-lg text-left transition-colors flex justify-between" data-idx="1">
+                                        <span class="font-bold text-charcoal">Dic / Ene</span><span class="text-xs text-charcoal-light uppercase">Virtual</span>
+                                    </button>
+                                    <button onclick="activateTime(2)" class="time-btn bg-white border border-sand-200 hover:border-terracotta-400 p-3 rounded-lg text-left transition-colors flex justify-between" data-idx="2">
+                                        <span class="font-bold text-charcoal">Febrero</span><span class="text-xs text-terracotta-600 uppercase">Acordar</span>
+                                    </button>
+                                    <button onclick="activateTime(3)" class="time-btn bg-white border border-sand-200 hover:border-terracotta-400 p-3 rounded-lg text-left transition-colors flex justify-between" data-idx="3">
+                                        <span class="font-bold text-charcoal">Marzo</span><span class="text-xs text-terracotta-600 uppercase">Acordar</span>
+                                    </button>
+                                    <button onclick="activateTime(4)" class="time-btn bg-white border border-sand-200 hover:border-terracotta-400 p-3 rounded-lg text-left transition-colors flex justify-between" data-idx="4">
+                                        <span class="font-bold text-charcoal">Post-Mapeo</span><span class="text-xs text-charcoal-light uppercase">Autónomo</span>
+                                    </button>
+                                </div>
+                                <!-- Info Panel -->
+                                <div class="w-2/3 bg-white border border-sand-200 rounded-xl p-8 flex flex-col justify-center transition-opacity min-h-[300px]" id="time-display">
+                                    <div class="text-center opacity-50 text-charcoal-light"><i data-lucide="calendar" class="w-12 h-12 mx-auto mb-4"></i><p>Haz clic en un mes para ver las actividades clave y proyectar agendas.</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SLIDE 14: AGRADECIMIENTOS Y CIERRE (Nueva) -->
+                    <div class="slide bg-olive-700 text-white" id="slide-13">
+                        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+                        <div class="relative h-full flex flex-col justify-center items-center text-center px-16">
+                            <span class="font-sans text-xs tracking-[0.2em] text-sand-300 uppercase font-bold mb-6">Unidos por el territorio</span>
+                            <h2 class="font-serif text-5xl md:text-6xl italic text-white leading-tight mb-6 drop-shadow-md">
+                                ¡Muchas gracias!
+                            </h2>
+                            <p class="font-sans text-xl text-sand-100 max-w-2xl font-light mb-12">
+                                "Por un mapeo con sentido, por los saberes compartidos y por la paz cotidiana de El Bagre."
+                            </p>
+                            <div class="inline-flex items-center space-x-3 px-6 py-2 bg-white/10 rounded-full border border-white/20">
+                                <span class="text-xs text-sand-200 uppercase font-bold tracking-wider">Mesa de trabajo y planeación • Octubre 2026</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- CONTROLES INFERIORES -->
+            <div class="h-16 flex items-center justify-between px-6 bg-white border-t border-sand-200 z-50 shrink-0 shadow-lg">
+                <button type="button" id="btn-toggle-notes" class="flex items-center space-x-2 px-4 py-2 bg-sand-100 hover:bg-sand-200 text-charcoal rounded-md transition-colors text-xs font-bold">
+                    <i data-lucide="monitor-play" id="sidebarIcon" class="w-4 h-4 text-terracotta-600 pointer-events-none"></i>
+                    <span class="pointer-events-none hidden sm:inline" id="toggle-notes-text">Ocultar Notas</span>
+                </button>
+                
+                <!-- Barra de Progreso -->
+                <div class="flex-grow max-w-md mx-8 flex items-center space-x-4">
+                    <button type="button" id="btn-prev" class="p-1 hover:bg-sand-100 rounded text-charcoal"><i data-lucide="chevron-left" class="w-5 h-5 pointer-events-none"></i></button>
+                    <div class="flex-grow h-1.5 bg-sand-200 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-olive-500 transition-all duration-300 w-0"></div>
+                    </div>
+                    <button type="button" id="btn-next" class="p-1 hover:bg-sand-100 rounded text-charcoal"><i data-lucide="chevron-right" class="w-5 h-5 pointer-events-none"></i></button>
+                </div>
+                
+                <div class="font-mono text-xs font-bold text-charcoal-light w-12 text-right"><span id="page-num">1</span>/14</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            let currentIndex = 0;
+            const totalSlides = 14;
+            let sidebarOpen = true;
+
+            const notesDB = [
+                { title: "Bloque 1: Aterrizaje", body: "<strong>Dinámica en círculo (30 mins):</strong> Cada persona tiene hasta 2 minutos para presentarse.<br><br><em>Pregunta:</em> 'Dinos tu nombre, qué haces en El Bagre, y ¿cuáles son tus tres placeres simples favoritos? o ¿qué te hizo sonreír esta última semana?'<br><br><strong>Cierre:</strong> Destacar que nos conectan alegrías cotidianas similares." },
+                { title: "El Ecosistema", body: "Explica rápidamente la alianza.<br><br><strong>Red ECO:</strong> El marco que nos respalda.<br><strong>SEHPAZ:</strong> El liderazgo territorial (los verdaderos protagonistas).<br><strong>Nosotros:</strong> Venimos a acompañar metodológicamente, no a imponer." },
+                { title: "La Inspiración (El Tambo)", body: "Cuenta la historia de Co-inspira brevemente. En El Tambo y el Cauca la comunidad mapeó su propio territorio y de allí nacieron iniciativas sostenibles como la Fundación CreAmos y el SOLE Lab.<br><br><em>Dato:</em> Más adelante hablaremos con Alejandra, quien lideró esto allá." },
+                { title: "La Pregunta Guía", body: "Lee la pregunta en voz alta. <br><br>Explica que el mapeo no es un diagnóstico de tristezas, sino una forma de entender cómo, a pesar de todo, se sostiene la paz en el día a día. Queremos encontrar y potenciar los <em>habilitadores</em>." },
+                { title: "El Juego de los Sistemas", body: "<strong>¡Momento de levantarse! (15 min)</strong><br>Diles: 'Para entender la diferencia entre reloj y nube, vamos a jugar'.<br><br>Haz clic en los botones de la pantalla para mostrar/recordar las reglas.<br><strong>Ronda 1:</strong> A 1 metro de distancia.<br><strong>Ronda 2:</strong> En el medio de dos personas." },
+                { title: "Reflexión del Juego", body: "Pídeles que se sienten. Abre un diálogo corto (5-7 mins).<br><br>Escucha sus ideas y guíalos a la conclusión: en un sistema interconectado, mover un solo proyecto o actor desestabiliza a todo el resto." },
+                { title: "Las dos columnas", body: "Cierre conceptual de la dinámica.<br><br>El enfoque mecánico busca 'la pieza rota' para arreglarla (lineal). El enfoque sistémico asume que todo está conectado (nube). Intervenir en El Bagre es intentar mover una nube." },
+                { title: "Ejemplos Concretos", body: "Muestra la comparativa de los ejemplos del 'Reloj' frente a los de la 'Nube'. Explica que un diagnóstico simple no puede predecir cómo se comporta un sistema en El Bagre. Las reglas de una 'nube' a menudo son invisibles, y para comprenderlas necesitamos la perspectiva interna de la comunidad." },
+                { title: "Transformación Sistémica", body: "Aterriza los conceptos del PDF.<br><br>- El sistema no cambia desde afuera y no lo controlamos.<br>- Pasamos de enfocarnos en problemas a entender las relaciones hoy.<br>- Pasamos de convencer a <strong>comprender y colaborar</strong>.<br>- No traemos soluciones mágicas; aprovechamos lo que el sistema elige conservar." },
+                { title: "Inmersión Interactiva", body: "<strong>Dinámica de grupos (15 min)</strong><br><br>Dile a los 3 grupos que ingresen al QR o enlace. Que exploren y generen 2 preguntas clave.<br><br><em>Nota:</em> Prepara la conexión con Alejandra para las 11:10 a.m. (30 min de llamada)." },
+                { title: "Transparencia: El Alcance", body: "Sé muy claro: Gracias a la Red ECO, nuestro compromiso de acompañamiento técnico presencial llegará hasta la finalización del mapa sistémico (3 viajes).<br><br>La identificación de oportunidades será un ejercicio virtual y autónomo para cada organización." },
+                { title: "Gobernanza y Roles", body: "Asignación de responsabilidades:<br>- <strong>Dayanis:</strong> Enlace local clave.<br>- <strong>Equipo motor (5 pers.):</strong> Voluntarios para reuniones virtuales entre viajes para afinar detalles.<br>- <strong>Mapeadores:</strong> Todos los presentes hoy." },
+                { title: "Cronograma a Confirmar", body: "Haz clic en cada mes de la pantalla para mostrar qué se hará. Pide que tomen nota y saquen agendas para intentar fijar la fecha del Taller de Noviembre y Febrero.<br><br><strong>Cierre:</strong> Agradecimiento profundo a SEHPAZ por abrir el espacio." },
+                { title: "Cierre de la Reunión", body: "Cierre formal, agradecimientos y firma de los acuerdos. Recordar el próximo paso acordado (fecha preliminar de noviembre)." }
+            ];
+
+            const sysDB = {
+                reloj: { title: "Ronda 1: Sistema Mecánico", text: "Elijan mentalmente a <strong>una sola persona</strong> en el salón (no lo digan).<br><br>Al escuchar 'Play', caminen y ubíquense a exactamente <strong>un metro de distancia</strong> (un brazo) de esa persona y mantengan esa distancia en todo momento." },
+                nube: { title: "Ronda 2: Sistema Complejo", text: "Elijan mentalmente a <strong>dos personas</strong> diferentes (en secreto).<br><br>Al escuchar 'Play', su único objetivo es mantenerse ubicados exactamente <strong>en la mitad (equidistante)</strong> de esas dos personas. Si ellas se mueven, reajústense de inmediato." }
+            };
+
+            const timeDB = [
+                { t: "1. Entrenamiento en narrativas de vida (Noviembre)", d: "Taller presencial de un día y medio en el que capacitaremos al grupo para la recolección activa e historias de vida cotidiana en el territorio." },
+                { t: "2. Seguimiento y campo (Diciembre / Enero)", d: "Acompañamiento autónomo y virtual. Recolección de historias por parte del grupo y sesiones de afinación virtual con el Equipo Motor." },
+                { t: "3. Análisis de fuerzas (Febrero)", d: "Encuentro presencial para leer colectivamente las narrativas e identificar las fuerzas invisibles (habilitadores e inhibidores) que influyen en la paz." },
+                { t: "4. Mapeo sistémico (Marzo)", d: "Último taller presencial para hilar las fuerzas (bucles) y consolidar el mapa físico y su visualización digital en la herramienta Kumu." },
+                { t: "5. Post-Mapeo (Acompañamiento virtual)", d: "Sesiones en línea de apoyo metodológico para que cada organización participante use el mapa y diseñe de forma autónoma sus planes de transformación." }
+            ];
+
+            function renderUI() {
+                for(let i = 0; i < totalSlides; i++) {
+                    const slide = document.getElementById('slide-' + i);
+                    if (slide) {
+                        if (i === currentIndex) slide.classList.add('active');
+                        else slide.classList.remove('active');
+                    }
+                }
+
+                document.getElementById('page-num').innerText = currentIndex + 1;
+                document.getElementById('progress-bar').style.width = `${((currentIndex) / (totalSlides - 1)) * 100}%`;
+
+                const notesContainer = document.getElementById('notes-container');
+                if (notesContainer) {
+                    notesContainer.style.opacity = 0;
+                    setTimeout(() => {
+                        const data = notesDB[currentIndex];
+                        notesContainer.innerHTML = `
+                            <h3 class="font-serif text-xl font-bold text-charcoal mb-4 border-b border-sand-200 pb-2">${data.title}</h3>
+                            <p class="font-sans text-[15px] text-charcoal-light leading-relaxed">${data.body}</p>
+                        `;
+                        notesContainer.style.opacity = 1;
+                    }, 200);
+                }
+            }
+
+            // Exponer funciones interactivas a Window para el HTML onClick
+            window.activateSysType = function(type) {
+                document.querySelectorAll('.sys-btn').forEach(btn => {
+                    if(btn.getAttribute('data-sys') === type) {
+                        btn.classList.add('border-' + (type==='reloj'?'terracotta':'olive') + '-400', 'bg-white', 'shadow-md');
+                        btn.classList.remove('border-transparent', 'bg-sand-50');
+                    } else {
+                        btn.classList.remove('border-terracotta-400', 'border-olive-400', 'bg-white', 'shadow-md');
+                        btn.classList.add('border-transparent', 'bg-sand-50');
+                    }
+                });
+                const display = document.getElementById('sys-display');
+                display.style.opacity = 0;
+                setTimeout(() => {
+                    display.innerHTML = `<h3 class="font-serif text-3xl text-${type==='reloj'?'terracotta':'olive'}-600 mb-4">${sysDB[type].title}</h3><p class="text-lg text-charcoal-light leading-relaxed">${sysDB[type].text}</p>`;
+                    display.classList.replace('bg-sand-50', 'bg-white');
+                    display.style.opacity = 1;
+                }, 200);
+            };
+
+            window.activateTime = function(idx) {
+                document.querySelectorAll('.time-btn').forEach(btn => {
+                    if(parseInt(btn.getAttribute('data-idx')) === idx) {
+                        btn.classList.add('border-terracotta-500', 'bg-sand-100', 'shadow-md');
+                    } else {
+                        btn.classList.remove('border-terracotta-500', 'bg-sand-100', 'shadow-md');
+                    }
+                });
+                const display = document.getElementById('time-display');
+                display.style.opacity = 0;
+                setTimeout(() => {
+                    display.innerHTML = `<h3 class="font-serif text-2xl text-olive-700 mb-3">${timeDB[idx].t}</h3><p class="text-charcoal-light text-base md:text-lg leading-relaxed">${timeDB[idx].d}</p>`;
+                    display.style.opacity = 1;
+                }, 200);
+            };
+
+            // Controles de Navegación
+            document.getElementById('btn-next').addEventListener('click', () => { if (currentIndex < totalSlides - 1) { currentIndex++; renderUI(); } });
+            document.getElementById('btn-prev').addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderUI(); } });
+
+            document.getElementById('btn-toggle-notes').addEventListener('click', () => {
+                sidebarOpen = !sidebarOpen;
+                const sidebar = document.getElementById('notes-sidebar');
+                const btnText = document.getElementById('toggle-notes-text');
+                const icon = document.getElementById('sidebarIcon');
+
+                if (sidebarOpen) {
+                    sidebar.classList.remove('-ml-96', 'hidden');
+                    btnText.innerText = "Ocultar Notas";
+                    icon.setAttribute('data-lucide', 'monitor-play');
+                } else {
+                    sidebar.classList.add('-ml-96');
+                    btnText.innerText = "Mostrar Notas";
+                    icon.setAttribute('data-lucide', 'monitor-pause');
+                }
+                lucide.createIcons();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === 'Space') {
+                    e.preventDefault();
+                    if (currentIndex < totalSlides - 1) { currentIndex++; renderUI(); }
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (currentIndex > 0) { currentIndex--; renderUI(); }
+                }
+            });
+
+            // Cronómetro
+            let startTime = Date.now();
+            setInterval(() => {
+                let diff = Math.floor((Date.now() - startTime) / 1000);
+                let m = String(Math.floor(diff / 60)).padStart(2, '0');
+                let s = String(diff % 60).padStart(2, '0');
+                let timerEl = document.getElementById('timer');
+                if(timerEl) timerEl.innerText = `${m}:${s}`;
+            }, 1000);
+
+            renderUI();
+        });
+    </script>
+</body>
+</html>
